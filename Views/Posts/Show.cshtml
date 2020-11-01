@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "Show";
+}
+
+
+<p>@ViewBag.Post.Date</p>
+<p>@ViewBag.Post.Content</p>
+<h4>Comments</h4>
+@foreach (var comment in ViewBag.Comments)
+{
+    <br />
+    <p>@comment.Date</p>
+    <p>@comment.Content</p>
+    <a href="/Comments/Edit/@comment.Id">Editeaza comentariu</a>
+    <a href="/Comments/Delete/@comment.Id">Sterge comentariu</a>
+    <br />
+}
+<form method="post" action="/Comments/New">
+    <textarea name="Content"></textarea>
+    <input type="hidden" name="Date" value="@DateTime.Now" />
+    <input type="hidden" name="PostId" value="@ViewBag.PostId" />
+    <br />
+    <button type="submit">Adauga comentariu</button>
+</form>
+<br />
+<a href="/Posts/Edit/@ViewBag.PostId">Editeaza postare</a>
+<form method="post" action="/Posts/Delete/@ViewBag.PostId">
+    @Html.HttpMethodOverride(HttpVerbs.Delete)
+    <button type="submit">Sterge postare</button>
+</form>
+<a href="/Posts/Index">Vezi toate postarile</a>
+<br />

@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "New";
+}
+
+<form method="post" action="/Posts/New">
+ <label>Adauga postare</label>
+ <textarea name="Content"></textarea>
+ <input type="hidden" name="Date" value="@DateTime.Now" />
+ <br />
+ <button type="submit">Posteaza</button>
+</form>
+

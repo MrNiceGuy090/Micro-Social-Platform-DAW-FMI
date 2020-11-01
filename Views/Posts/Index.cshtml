@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Postari</h2>
+@foreach (var post in ViewBag.Posts)
+{
+    <p>@post.Date</p>
+    <p>@post.Content</p>
+    <a href="/Posts/Show/@post.Id">Vezi postarea</a>
+    <br />
+}
+
+
+<a href="/Posts/New">Adauga articol</a>
