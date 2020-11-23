@@ -16,8 +16,14 @@ namespace MicroSocialPlatform.Controllers
         {
             var posts = from post in db.Posts
                         select post;
-
             ViewBag.Posts = posts;
+
+
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.Message = TempData["message"].ToString();
+            }
+
             return View();
         }
         //Get
@@ -30,7 +36,7 @@ namespace MicroSocialPlatform.Controllers
                            where comment.PostId == id
                            select comment;
             ViewBag.Comments = comments;
-            return View();
+            return View(post);
         }
         public ActionResult New()
         {
@@ -40,30 +46,55 @@ namespace MicroSocialPlatform.Controllers
         [HttpPost]
         public ActionResult New(Post postare)
         {
-            db.Posts.Add(postare);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    db.Posts.Add(postare);
+                    db.SaveChanges();
+                    TempData["message"] = "Postarea a fost adaugata!";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return View(postare);
+                }
+            }
+            catch (Exception e)
+            {
+                return View(postare);
+            }
+
         }
         public ActionResult Edit(int id)
         {
             Post post = db.Posts.Find(id);
             ViewBag.Post = post;
-            return View();
+            return View(post);
         }
         [HttpPut]
         public ActionResult Edit(int id, Post requestPost)
         {
             try
             {
-                Post post = db.Posts.Find(id);
-                if (TryUpdateModel(post))
+                if (ModelState.IsValid)
                 {
-                    post.Content = requestPost.Content;
-                    post.Date = requestPost.Date;
-                    db.SaveChanges();
+                    Post post = db.Posts.Find(id);
+
+                    if (TryUpdateModel(post))
+                    {
+                        post.Content = requestPost.Content;
+                        post.Date = requestPost.Date;
+                        db.SaveChanges();
+                    }
+                    
+                    return RedirectToAction("Show", new { id = id });
                 }
-                return RedirectToAction("Show",new { id=id });
+
+                else
+                {
+                    return View(requestPost);
+                }
             }
             catch (Exception e)
             {
@@ -77,6 +108,7 @@ namespace MicroSocialPlatform.Controllers
             Post post = db.Posts.Find(id);
             db.Posts.Remove(post);
             db.SaveChanges();
+            TempData["message"] = "Postarea a fost sters!";
             return RedirectToAction("Index");
         }
 

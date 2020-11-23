@@ -8,9 +8,10 @@ namespace MicroSocialPlatform.Models
 {
     public class AppDBContext : DbContext
     {
-        public AppDBContext() : base("DBConnectionString") {
-            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<AppDBContext, MicroSocialPlatform.Migrations.Configuration>("DBConnectionString"));
-        
+        public AppDBContext() : base("DBConnectionString")
+        {
+           Database.SetInitializer(new MigrateDatabaseToLatestVersion<AppDBContext, MicroSocialPlatform.Migrations.Configuration>("DBConnectionString"));
+
         }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }

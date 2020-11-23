@@ -39,7 +39,7 @@ namespace MicroSocialPlatform.Controllers
                     com.Date = requestCom.Date;
                     db.SaveChanges();
                 }
-                return RedirectToAction("Show","Posts", new { id = com.PostId } );
+                return RedirectToAction("Show", "Posts", new { id = com.PostId });
             }
             catch (Exception e)
             {
@@ -53,7 +53,7 @@ namespace MicroSocialPlatform.Controllers
             var postId = com.PostId;
             db.Comments.Remove(com);
             db.SaveChanges();
-            return RedirectToAction("Show","Posts", new {id=postId });
+            return RedirectToAction("Show", "Posts", new { id = postId });
         }
     }
 }

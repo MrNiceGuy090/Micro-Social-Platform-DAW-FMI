@@ -2,6 +2,7 @@
     ViewBag.Title = "Index";
 }
 
+<h1>@ViewBag.Message</h1>
 <h2>Postari</h2>
 @foreach (var post in ViewBag.Posts)
 {
@@ -12,4 +13,4 @@
 }
 
 
-<a href="/Posts/New">Adauga articol</a>
+<a href="/Posts/New">Adauga postare</a>
