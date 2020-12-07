@@ -16,6 +16,8 @@ namespace MicroSocialPlatform.Models
         public DateTime Date { get; set; }
         public int PostId { get; set; }
 
+        public string UserId { get; set; }
+        public virtual ApplicationUser User { get; set; }
         public virtual Post Post { get; set; }
 
     }

@@ -5,17 +5,21 @@ using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
 using MicroSocialPlatform.Models;
+using Microsoft.AspNet.Identity;
 
 namespace MicroSocialPlatform.Controllers
 {
     public class PostsController : Controller
     {
-        private AppDBContext db = new AppDBContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
         // GET: Posts
+
+        [Authorize(Roles = "User,Admin")]
         public ActionResult Index()
         {
-            var posts = from post in db.Posts
-                        select post;
+            //var posts = from post in db.Posts
+            //            select post;
+            var posts = db.Posts.Include("User");
             ViewBag.Posts = posts;
 
 
@@ -27,9 +31,13 @@ namespace MicroSocialPlatform.Controllers
             return View();
         }
         //Get
+        [Authorize(Roles = "User,Admin")]
         public ActionResult Show(int id)
         {
             Post post = db.Posts.Find(id);
+
+            SetAccessRights();
+
             ViewBag.Post = post;
             ViewBag.PostId = id;
             var comments = from comment in db.Comments
@@ -38,14 +46,20 @@ namespace MicroSocialPlatform.Controllers
             ViewBag.Comments = comments;
             return View(post);
         }
+
+        [Authorize(Roles = "User,Admin")]
         public ActionResult New()
         {
-            return View();
+            Post post = new Post();
+            post.UserId = User.Identity.GetUserId();
+            return View(post);
         }
 
         [HttpPost]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult New(Post postare)
         {
+            postare.UserId = User.Identity.GetUserId();
             try
             {
                 if (ModelState.IsValid)
@@ -66,13 +80,25 @@ namespace MicroSocialPlatform.Controllers
             }
 
         }
+        [Authorize(Roles = "User,Admin")]
         public ActionResult Edit(int id)
         {
             Post post = db.Posts.Find(id);
             ViewBag.Post = post;
-            return View(post);
+
+            if (post.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
+            {
+                return View(post);
+            }
+
+            else
+            {
+                TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui postari care nu va apartine";
+                return RedirectToAction("Index");
+            }
         }
         [HttpPut]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult Edit(int id, Post requestPost)
         {
             try
@@ -103,14 +129,37 @@ namespace MicroSocialPlatform.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult Delete(int id)
         {
             Post post = db.Posts.Find(id);
-            db.Posts.Remove(post);
-            db.SaveChanges();
-            TempData["message"] = "Postarea a fost sters!";
-            return RedirectToAction("Index");
+
+            if (post.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
+            {
+                db.Posts.Remove(post);
+                db.SaveChanges();
+                TempData["message"] = "Postarea a fost sters!";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["message"] = "Nu aveti dreptul sa stergeti unei postari care nu va apartine";
+                return RedirectToAction("Index");
+            }
         }
+
+        private void SetAccessRights()
+        {
+            ViewBag.afisareButoane = false;
+            if (User.IsInRole("Editor") || User.IsInRole("Admin"))
+            {
+                ViewBag.afisareButoane = true;
+            }
+
+            ViewBag.esteAdmin = User.IsInRole("Admin");
+            ViewBag.utilizatorCurent = User.Identity.GetUserId();
+        }
+
 
     }
 }

@@ -4,13 +4,14 @@
     ViewBag.Title = "Show";
 }
 
-
+<a href="/Profile/Index/@Model.User.Id">@Model.User.UserName</a>
 <p>@Model.Date</p>
 <p>@Model.Content</p>
 <h4>Comments</h4>
 @foreach (var comment in Model.Comments)
 {
     <br />
+    <a href="/Profile/Index/@comment.User.Id">@comment.User.UserName</a>
     <p>@comment.Date</p>
     <p>@comment.Content</p>
     <a href="/Comments/Edit/@comment.Id">Editeaza comentariu</a>
