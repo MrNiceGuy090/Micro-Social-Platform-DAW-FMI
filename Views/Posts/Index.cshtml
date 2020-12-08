@@ -2,9 +2,11 @@
     ViewBag.Title = "Index";
 }
 
+<h1>@ViewBag.Message</h1>
 <h2>Postari</h2>
 @foreach (var post in ViewBag.Posts)
 {
+    <a href="/Profile/Index/@post.User.Id">@post.User.UserName</a>
     <p>@post.Date</p>
     <p>@post.Content</p>
     <a href="/Posts/Show/@post.Id">Vezi postarea</a>
@@ -12,4 +14,4 @@
 }
 
 
-<a href="/Posts/New">Adauga articol</a>
+<a href="/Posts/New">Adauga postare</a>

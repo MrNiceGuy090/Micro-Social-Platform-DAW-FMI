@@ -1,16 +1,22 @@
-﻿
+﻿@model MicroSocialPlatform.Models.Comment
 @{
     ViewBag.Title = "Edit";
 }
 
-<form method="post" action="/Comments/Edit/@ViewBag.Comment.Id">
+@using (Html.BeginForm(actionName: "Edit", controllerName: "Comments"))
+{
     @Html.HttpMethodOverride(HttpVerbs.Put)
-    <br /> <input type="text" name="Content" value="@ViewBag.Comment.Content" />
-    <br /><br />
+    <br />
+    @Html.Label("Content", "Continutul Comentariului")
+    <br />
+    @Html.EditorFor(m => m.Content)
+    <br />
+    <br />
     <label>Data</label>
-    <br /> <input type="text" name="Date" value="@ViewBag.Comment.Date" />
+    <br />
+    <input type="text" name="Date" value="@ViewBag.Comment.Date" />
     <br />
     <button type="submit">Modifica comentariul</button>
-</form>
 
+}
 

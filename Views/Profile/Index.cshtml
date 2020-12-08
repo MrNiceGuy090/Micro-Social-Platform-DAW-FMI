@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Utilizatorul: @ViewBag.User.Name</h2>
+@if (ViewBag.Friendship == "prieteni")
+{
+    <p>Sunteti prieteni</p>
+}
+else if (ViewBag.Friendship == "straini")
+{
+    <a href="/Requests/Send/@ViewBag.User.Id">Trimite o cerere de prietenie</a>
+}
+else if (ViewBag.Friendship == "trimisa")
+{
+    <p>Cerere de prietenie trimisa</p>
+}
+else if (ViewBag.Friendship == "primita")
+{
+    <a href="/Requests/Accept/@ViewBag.User.Id">Accepta cererea de prietenie</a>
+}
+
+
+<h2>Postari</h2>
+@foreach (var post in ViewBag.Posts)
+{
+    <p>@post.User.UserName</p>
+    <p>@post.Date</p>
+    <p>@post.Content</p>
+    <a href="/Posts/Show/@post.Id">Vezi postarea</a>
+    <br />
+}

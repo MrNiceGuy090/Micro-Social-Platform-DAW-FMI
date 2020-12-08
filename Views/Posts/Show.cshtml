@@ -1,15 +1,17 @@
-﻿
+﻿@model MicroSocialPlatform.Models.Post
+
 @{
     ViewBag.Title = "Show";
 }
 
-
-<p>@ViewBag.Post.Date</p>
-<p>@ViewBag.Post.Content</p>
+<a href="/Profile/Index/@Model.User.Id">@Model.User.UserName</a>
+<p>@Model.Date</p>
+<p>@Model.Content</p>
 <h4>Comments</h4>
-@foreach (var comment in ViewBag.Comments)
+@foreach (var comment in Model.Comments)
 {
     <br />
+    <a href="/Profile/Index/@comment.User.Id">@comment.User.UserName</a>
     <p>@comment.Date</p>
     <p>@comment.Content</p>
     <a href="/Comments/Edit/@comment.Id">Editeaza comentariu</a>
@@ -24,8 +26,8 @@
     <button type="submit">Adauga comentariu</button>
 </form>
 <br />
-<a href="/Posts/Edit/@ViewBag.PostId">Editeaza postare</a>
-<form method="post" action="/Posts/Delete/@ViewBag.PostId">
+<a href="/Posts/Edit/@Model.Id">Editeaza postare</a>
+<form method="post" action="/Posts/Delete/@Model.Id">
     @Html.HttpMethodOverride(HttpVerbs.Delete)
     <button type="submit">Sterge postare</button>
 </form>
