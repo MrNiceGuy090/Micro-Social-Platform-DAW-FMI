@@ -21,8 +21,6 @@ namespace MicroSocialPlatform.Controllers
             var posts = db.Posts.Where(p => p.UserId == profil.Id).OrderByDescending(p => p.Date).ToList();
             ViewBag.Posts = posts;
 
-
-
             // Este prieten sau a primit request
             if (db.Friendship.Find(id, User.Identity.GetUserId()) != null)
                 ViewBag.Friendship = "prieteni";
@@ -32,6 +30,17 @@ namespace MicroSocialPlatform.Controllers
                 ViewBag.Friendship = "primita";
             else if (id != User.Identity.GetUserId())
                 ViewBag.Friendship = "straini";
+
+
+            var friendsid = db.Friendship.Where(p => p.Id == profil.Id).ToList();
+            List<Profile> friends = new List<Profile>();
+            foreach (var i in friendsid)
+            {
+                friends.Add(db.Profile.Find(i.Id2));
+            }
+
+            ViewBag.NoFriends = friends.Count();
+            ViewBag.Friends = friends;
             return View();
         }
     }
