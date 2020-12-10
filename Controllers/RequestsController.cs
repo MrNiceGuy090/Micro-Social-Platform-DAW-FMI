@@ -18,6 +18,8 @@ namespace MicroSocialPlatform.Controllers
             return View();
         }
 
+
+        //DE ADAUGAT: cazul in care requestul este deja trimis
         [Authorize(Roles = "User,Admin")]
         public ActionResult Send(string id)
         {
@@ -53,6 +55,34 @@ namespace MicroSocialPlatform.Controllers
             return View();
         }
 
+        [Authorize(Roles = "User,Admin")]
+        public ActionResult Refuse(string id)
+        {
+            Request req = db.Request.Find(id, User.Identity.GetUserId());
+            if (req != null)
+            {
+                db.Request.Remove(req);
+                db.SaveChanges();
+                return RedirectToAction("Index", "Profile", new { id });
+            }
+
+            return View();
+        }
+
+        [Authorize(Roles = "User,Admin")]
+        public ActionResult Remove(string id)
+        {
+            Friendship friend1 = db.Friendship.Find(id, User.Identity.GetUserId());
+            Friendship friend2 = db.Friendship.Find(User.Identity.GetUserId(), id);
+            if (friend1 != null && friend2 != null)
+            {
+                db.Friendship.Remove(friend1);
+                db.Friendship.Remove(friend2);
+                db.SaveChanges();
+                return RedirectToAction("Index", "Profile", new { id });
+            }
+            return View();
+        }
 
     }
 }

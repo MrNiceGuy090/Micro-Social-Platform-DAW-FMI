@@ -6,7 +6,8 @@
 <h2>Utilizatorul: @ViewBag.User.Name</h2>
 @if (ViewBag.Friendship == "prieteni")
 {
-    <p>Sunteti prieteni</p>
+    <p>Sunteti prieteni.</p>
+    <a href="/Requests/Remove/@ViewBag.User.Id">Remove friend</a>
 }
 else if (ViewBag.Friendship == "straini")
 {
@@ -19,6 +20,7 @@ else if (ViewBag.Friendship == "trimisa")
 else if (ViewBag.Friendship == "primita")
 {
     <a href="/Requests/Accept/@ViewBag.User.Id">Accepta cererea de prietenie</a>
+    <a href="/Requests/Refuse/@ViewBag.User.Id">Sterge cererea de prietenie</a>
 }
 
 
@@ -30,4 +32,11 @@ else if (ViewBag.Friendship == "primita")
     <p>@post.Content</p>
     <a href="/Posts/Show/@post.Id">Vezi postarea</a>
     <br />
+}
+
+<br />
+<h2>Lista de prieteni (@ViewBag.NoFriends):</h2>
+@foreach (var prieten in ViewBag.Friends)
+{
+    <p><a href="/Profile/Index/@prieten.Id">@prieten.Name</a></p>
 }
